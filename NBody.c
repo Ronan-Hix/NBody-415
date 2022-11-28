@@ -6,16 +6,18 @@
 #include "nrutil.h"
 
 
-#define nbodies 2
+#define nbodies 6
 #define noutputs 1000
 #define eps 0
+#define H0 0.67
+#define G 1
 
 void f(double t,double *y, double *dydt){
     double dx,dy,dz,d;
     for(int i=0;i<nbodies;i++){
-        dydt[1+7*i] = y[4+7*i];
-        dydt[2+7*i] = y[5+7*i];
-        dydt[3+7*i] = y[6+7*i];
+        dydt[1+7*i] = y[4+7*i] + H0*y[1+7*i];
+        dydt[2+7*i] = y[5+7*i] + H0*y[2+7*i];
+        dydt[3+7*i] = y[6+7*i] + H0*y[3+7*i];
         dydt[4+7*i] = 0;
         dydt[5+7*i] = 0;
         dydt[6+7*i] = 0;
@@ -25,9 +27,9 @@ void f(double t,double *y, double *dydt){
                 dy = y[2+7*i]-y[2+7*j];
                 dz = y[3+7*i]-y[3+7*j];
                 d = dx*dx+dy*dy+dz*dz;
-                dydt[4+7*i] -= y[0+7*j]*y[0+7*i]*dx/pow(d+eps,1.5);
-                dydt[5+7*i] -= y[0+7*j]*y[0+7*i]*dy/pow(d+eps,1.5);
-                dydt[6+7*i] -= y[0+7*j]*y[0+7*i]*dz/pow(d+eps,1.5);
+                dydt[4+7*i] -= G*y[0+7*j]*y[0+7*i]*dx/pow(d+eps,1.5);
+                dydt[5+7*i] -= G*y[0+7*j]*y[0+7*i]*dy/pow(d+eps,1.5);
+                dydt[6+7*i] -= G*y[0+7*j]*y[0+7*i]*dz/pow(d+eps,1.5);
             }
         }
     }
@@ -97,7 +99,7 @@ void leapfrog(double tn, double *y,double *dydt, double E,int N, double h, doubl
 //    double vn1_2 = y[1]*(0.5*h);//Kick from tn=0
 //    double xn = y[0];
     int i;
-    f(tn,y,dydt);
+    //f(tn,y,dydt);
     for(i=0;i<nbodies;i++){ //Initialize
         yout[0+7*i] = y[0+7*i];
         yout[1+7*i] = y[1+7*i];
@@ -112,11 +114,14 @@ void leapfrog(double tn, double *y,double *dydt, double E,int N, double h, doubl
         yout[4+7*i] += (0.5*h)*dydt[4+7*i]; //Kick
         yout[5+7*i] += (0.5*h)*dydt[5+7*i];
         yout[6+7*i] += (0.5*h)*dydt[6+7*i];
+
     }
     for(i=0;i<nbodies;i++){
-        yout[1+7*i] += h*yout[4+7*i]; //Drift
-        yout[2+7*i] += h*yout[5+7*i];
-        yout[3+7*i] += h*yout[6+7*i];
+        
+        yout[1+7*i] += h*dydt[1+7*i]; //Drift
+        yout[2+7*i] += h*dydt[2+7*i];
+        yout[3+7*i] += h*dydt[3+7*i];
+        
     }
     
     f(tn,yout,dydt); //f(xn+1)
@@ -176,7 +181,6 @@ int main(int nargs, char **argv){
         for(n = 0;n<=nstepmax;n++){
             (*frk)(trk,xrk,dxdtrk);
             rk4(xrk,dxdtrk,6*nbodies,trk,hrk,youtrk,frk);
-            //printf("[%f,%f,%f,%f,%f,%f,%f,%f,%f]\n",xrk[1],xrk[2],xrk[3],xrk[4],xrk[5],xrk[6],xrk[7],xrk[8],xrk[9]);
             trk += hrk;
             for(i=0;i<nbodies;i++){ //Initialize
                 xrk[1+6*i] = youtrk[1+6*i];
