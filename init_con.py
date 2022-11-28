@@ -62,6 +62,7 @@ p = ax.scatter(
 
 ax.set(xlim=(-50, 50), ylim=(-50, 50), zlim=(-50, 50))
 fig.colorbar(p, ax=ax, orientation="horizontal", label="vmag")
+plt.savefig("./init_test.png")
 # plt.figure(dpi=200, figsize=(6, 6))
 # plt.scatter(postions[:, 0], postions[:, 1], s=0.2)
 # plt.xlim(-50,50)
