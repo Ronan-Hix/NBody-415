@@ -1,17 +1,11 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Nov 28 12:03:12 2022
-
-@author: elainetaylor
-"""
-
 import numpy as np
 import matplotlib.pyplot as plt
 
-#np.random.seed(6666)
+
+seed = 861621
+np.random.seed(seed )
 n_particles = 10000
-n_sub_halos = 10
+n_sub_halos = 100
 n_per_sub = int(n_particles * 0.50 / n_sub_halos)
 n_central_halo = int(n_particles * 0.50)
 
@@ -56,7 +50,7 @@ master_positions = np.concatenate(master_positions)
 master_velocities = np.concatenate(master_velocities)
 
 
-fig = plt.figure(figsize=(5, 5), dpi=200)
+fig = plt.figure(figsize=(5, 5), dpi=300)
 ax = plt.axes(projection="3d")
 p = ax.scatter(
     master_positions[:, 0],
@@ -77,3 +71,6 @@ plt.savefig("./init_test.png")
 # plt.ylim(-50,50)
 masses = np.expand_dims(masses, axis=1)
 master = np.concatenate((masses, master_positions, master_velocities), axis=1)
+text_file_headr = "# mass x y z vx vy vz"
+np.savetxt("init_{}_{}_{}.txt".format(n_particles,n_sub_halos, seed),master,
+           header=text_file_headr)
