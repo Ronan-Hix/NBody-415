@@ -1,7 +1,15 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Nov 28 12:03:12 2022
+
+@author: elainetaylor
+"""
+
 import numpy as np
 import matplotlib.pyplot as plt
 
-np.random.seed(6666)
+#np.random.seed(6666)
 n_particles = 10000
 n_sub_halos = 10
 n_per_sub = int(n_particles * 0.50 / n_sub_halos)
@@ -22,22 +30,22 @@ masses = mass_per_particle * np.ones(n_particles)
 
 
 # central halo
-random_size = np.random.uniform(1, box_size * maximum_size_frac)
-postions = random_size * np.random.randn(n_central_halo, 3)
-velocities = np.random.randn(n_central_halo, 3)
+central_halo_size= np.random.uniform(1, box_size * maximum_size_frac)
+central_halo_position = central_halo_size * np.random.randn(n_central_halo, 3)
+central_halo_velocities = np.random.randn(n_central_halo, 3)
 
 master_positions = [
-    postions,
+    central_halo_position,
 ]
 master_velocities = [
-    velocities,
+    central_halo_velocities,
 ]
 
 # subhalos
 for i in range(n_sub_halos):
     random_coord = np.random.uniform(-box_size, box_size, size=(1, 3))
-    random_size = np.random.uniform(1, box_size * maximum_size_frac)
-
+    #random_size = np.random.uniform(1, box_size * maximum_size_frac)
+    random_size = np.random.uniform(1, central_halo_size)
     postions = random_size * np.random.randn(n_per_sub, 3) - random_coord
     velocities = np.random.randn(n_per_sub, 3)
 
@@ -45,7 +53,7 @@ for i in range(n_sub_halos):
     master_velocities.append(velocities)
 
 master_positions = np.concatenate(master_positions)
-master_velocites = np.concatenate(master_velocities)
+master_velocities = np.concatenate(master_velocities)
 
 
 fig = plt.figure(figsize=(5, 5), dpi=200)
@@ -54,7 +62,7 @@ p = ax.scatter(
     master_positions[:, 0],
     master_positions[:, 1],
     master_positions[:, 2],
-    c=np.linalg.norm(master_velocites, axis=1),
+    c=np.linalg.norm(master_velocities, axis=1),
     s=0.2,
     alpha=0.8,
     cmap=plt.cm.viridis,
@@ -67,3 +75,5 @@ plt.savefig("./init_test.png")
 # plt.scatter(postions[:, 0], postions[:, 1], s=0.2)
 # plt.xlim(-50,50)
 # plt.ylim(-50,50)
+masses = np.expand_dims(masses, axis=1)
+master = np.concatenate((masses, master_positions, master_velocities), axis=1)
