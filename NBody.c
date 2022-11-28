@@ -6,7 +6,7 @@
 #include "nrutil.h"
 
 
-#define nbodies 6
+#define nbodies 10000
 #define noutputs 1000
 #define eps 0
 #define H0 0.67

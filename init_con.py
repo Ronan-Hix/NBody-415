@@ -17,7 +17,7 @@ velocity_unit = 1e5  # m/s
 
 
 # total mass in box assuming critical density
-total_mass = 50**3 * 2.8 * 1e11 / n_particles
+total_mass = 50**3 * 2.8 * 1e11 / 1000
 # assume uniform dm masses, sets mass resolution
 mass_per_particle = total_mass / mass_unit
 masses = mass_per_particle * np.ones(n_particles)
@@ -72,5 +72,4 @@ plt.savefig("./init_test.png")
 masses = np.expand_dims(masses, axis=1)
 master = np.concatenate((masses, master_positions, master_velocities), axis=1)
 text_file_headr = "# mass x y z vx vy vz"
-np.savetxt("init_{}_{}_{}.txt".format(n_particles,n_sub_halos, seed),master,
-           header=text_file_headr)
+np.savetxt("init_{}_{}_{}.txt".format(n_particles,n_sub_halos, seed),master)
