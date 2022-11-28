@@ -4,9 +4,6 @@ import os
 import pandas as pd
 from  matplotlib.colors import LogNorm
 import matplotlib
-#import glob 
-#import PIL
-#from PIL import Image
 
 
 data_dir = './outputs'
@@ -50,15 +47,3 @@ for file in dataset:
     ax.set(xlim=(-100,100), ylim=(-100,100))
     plt.savefig("./images/{}.png".format(output_number), dpi=300)
     
-    
-'''
-fp_in = "./{}*.png".format("./images/")
-fp_out = "./{}_{}.gif".format(x, y)
-print(fp_in)
-img, *imgs = [Image.open(f) for f in sorted(glob.glob(fp_in))]
-print("Processing Frames to a gif...")
-img.save(
-     fp=fp_out, format="GIF", append_images=imgs, save_all=True, duration=4, loop=0
- )
-print("Image saved to", fp_out)
-'''
