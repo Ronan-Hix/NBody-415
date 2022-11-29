@@ -6,9 +6,9 @@ from  matplotlib.colors import LogNorm
 import matplotlib
 
 
-data_dir = './outputs'
+data_dir = '/Users/elainetaylor/Desktop/ASTR415/Final Project /NBody-415/outputs'
 
-dataset = sorted(os.listdir(data_dir))#[::20]
+dataset = sorted(os.listdir(data_dir)) #[::20]
 
 for file in dataset:
     snapshot_data = pd.read_csv(os.path.join(data_dir, file))
