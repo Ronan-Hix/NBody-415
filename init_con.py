@@ -46,7 +46,7 @@ for i in range(n_sub_halos):
     master_positions.append(postions)
     master_velocities.append(velocities)
 
-master_positions = np.concatenate(master_positions)
+master_positions = np.concatenate(master_positions)/2
 master_velocities = np.concatenate(master_velocities)
 
 

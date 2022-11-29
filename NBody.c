@@ -8,7 +8,7 @@
 
 #define nbodies 10000
 #define noutputs 1000
-#define eps 0
+#define eps 0.1
 #define H0 0.67
 #define G 1
 
