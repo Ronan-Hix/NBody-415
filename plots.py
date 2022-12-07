@@ -114,7 +114,9 @@ with plt.style.context("dark_background"):
                 plot_x, plot_y, plot_z = rotated_star_positions.T
                 draw_frame(plot_x, plot_y, mass, time[idx])
                 plt.savefig(
-                    "./{}/{}_{}.png".format(sequence_dir, output_number, str(pan_idx).zfill(3)),
+                    "./{}/{}_{}.png".format(
+                        sequence_dir, output_number, str(pan_idx).zfill(3)
+                    ),
                     dpi=300,
                     bbox_inches="tight",
                     pad_inches=0.0,
@@ -132,43 +134,6 @@ with plt.style.context("dark_background"):
         )
         # plt.close()
 #%%
-
-
-def nav_fre_whi(r, rho_0, r_scale):
-    rho = rho_0 / ((r / r_scale) * (1 + (r / r_scale)) ** 2)
-    return rho
-
-
-def surface_density(x_coord, y_coord, z_coord, masses, radius, num_bins):
-    """
-    Gets 3d density profile of a DM halo.
-    """
-
-    starting_point = 0.01  # in parsecs
-    r = np.geomspace(starting_point, radius, num=num_bins, endpoint=True)
-
-    all_positions = np.vstack((x_coord, y_coord, z_coord)).T
-
-    distances = np.sqrt(np.sum(np.square(all_positions), axis=1))
-    mass_per_bin, bin_edges = np.histogram(distances, bins=r, weights=masses)
-    count_per_bin, _ = np.histogram(distances, bins=r)
-
-    # mask out empty bins
-    mask = count_per_bin > 0
-    mass_per_bin = mass_per_bin[mask]
-    count_per_bin = count_per_bin[mask]
-
-    # getting bin properties
-    right_edges = bin_edges[1:]
-    left_edges = bin_edges[:-1]
-    bin_ctrs = 0.5 * (left_edges + right_edges)[mask]
-    # calculate the mass per thin surface area of a sphere
-    d_volume = (4 / 3) * np.pi * (right_edges**3 - left_edges**3)[mask]
-    mass_density = mass_per_bin / d_volume
-    avg_star_masses = mass_per_bin / count_per_bin
-    err_surf_mass_density = np.sqrt(count_per_bin) * (avg_star_masses / d_volume)
-
-    return bin_ctrs, mass_density, err_surf_mass_density
 
 
 #%%
