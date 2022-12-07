@@ -74,10 +74,12 @@ def draw_frame(x, y, mass, t):
     ax.tick_params(axis="both", labeltop="on", direction="in", which="both")
 
 
-pause_and_rotate = [175, 375, 999]
+pause_and_rotate = [175, 375]
 with plt.style.context("dark_background"):
     for idx, file in enumerate(dataset):
         print(file)
+        if idx not in pause_and_rotate:
+            continue
         snapshot_data = pd.read_csv(os.path.join(data_dir, file))
         # snapshot_data = snapshot_data.to_numpy(snapshot_data)
         snapshot_data = np.loadtxt(
@@ -112,7 +114,7 @@ with plt.style.context("dark_background"):
                 plot_x, plot_y, plot_z = rotated_star_positions.T
                 draw_frame(plot_x, plot_y, mass, time[idx])
                 plt.savefig(
-                    "./{}/{}_{}.png".format(sequence_dir, output_number, pan_idx),
+                    "./{}/{}_{}.png".format(sequence_dir, output_number, str(pan_idx).zfill(3)),
                     dpi=300,
                     bbox_inches="tight",
                     pad_inches=0.0,
